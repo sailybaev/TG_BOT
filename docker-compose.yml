@@ -1,0 +1,51 @@
+services:
+  # Telegram Bot
+  telegram-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tabys-telegram-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - TABYS_API_URL=${TABYS_API_URL:-http://host.docker.internal:8000}
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - tabys-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Redis for session storage
+  redis:
+    image: redis:7-alpine
+    container_name: tabys-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - tabys-network
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy volatile-lru
+
+networks:
+  tabys-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+    driver: local

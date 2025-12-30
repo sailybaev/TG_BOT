@@ -1,0 +1,69 @@
+version: '3.8'
+
+# Production docker-compose configuration
+# Usage: docker-compose -f docker-compose.prod.yml up -d
+
+services:
+  # Telegram Bot
+  telegram-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tabys-telegram-bot
+    restart: always
+    env_file:
+      - .env.prod
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - LOG_LEVEL=WARNING
+      - DEBUG=false
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - tabys-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+  # Redis for session storage
+  redis:
+    image: redis:7-alpine
+    container_name: tabys-redis
+    restart: always
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - tabys-network
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy volatile-lru
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+
+networks:
+  tabys-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+    driver: local
