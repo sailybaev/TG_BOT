@@ -62,6 +62,7 @@ class OTPVerifyResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     admin_id: int
+    admin_name: str
     role: str
     telegram_user_id: str
     session_created: bool
@@ -72,6 +73,7 @@ class SessionRestoreResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     admin_id: int
+    admin_name: str
     role: str
     telegram_user_id: str
     session_created: bool

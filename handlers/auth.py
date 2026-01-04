@@ -49,18 +49,18 @@ async def cmd_start(
 
         await message.answer(
             f"👋 <b>С возвращением!</b>\n\n"
-            f"{role_icon} <b>{session.admin_name or f'Админ #{session.admin_id}'}</b>\n"
-            f"🎭 Роль: <code>{session.role}</code>\n\n"
+            f"👤 <b>{session.admin_name or f'Админ #{session.admin_id}'}</b>\n"
+            f"{role_icon} <b>Роль:</b> <code>{session.role}</code>\n\n"
             "📱 <b>Используйте меню ниже для навигации:</b>",
             reply_markup=get_main_menu(rbac),
             parse_mode="HTML"
         )
     else:
         await message.answer(
-            "🤖 <b>Добро пожаловать в Tabys CRM Bot!</b>\n\n"
+            "🤖 <b>Добро пожаловать в Saryarqa Jastary Bot!</b>\n\n"
             "🔐 <b>Требуется авторизация</b>\n\n"
             "📋 <b>Как войти:</b>\n"
-            "1️⃣ Войдите в админ-панель Tabys\n"
+            "1️⃣ Войдите в админ-панель Saryarqa Jastary\n"
             "2️⃣ Сгенерируйте OTP токен\n"
             "3️⃣ Отправьте: <code>/login ВАШ_OTP_ТОКЕН</code>\n\n"
             "💡 <b>Пример:</b>\n"
@@ -106,7 +106,7 @@ async def cmd_login(
             "<code>/login ВАШ_OTP_ТОКЕН</code>\n\n"
             "💡 <b>Пример:</b>\n"
             "<code>/login A7B9C3D5</code>\n\n"
-            "🔑 Получите OTP в админ-панели Tabys.",
+            "🔑 Получите OTP в админ-панели Saryarqa Jastary.",
             parse_mode="HTML"
         )
         return
@@ -142,6 +142,7 @@ async def cmd_login(
             admin_id=result.admin_id,
             role=result.role,
             access_token=result.access_token,
+            admin_name=result.admin_name,
         )
 
         # Create RBAC context for menu
@@ -165,9 +166,9 @@ async def cmd_login(
 
         await message.answer(
             f"✅ <b>Вход выполнен успешно!</b>\n\n"
-            f"{role_icon} <b>Роль:</b> <code>{result.role}</code>\n"
-            f"🆔 <b>ID админа:</b> <code>{result.admin_id}</code>\n\n"
-            "🎉 <b>Добро пожаловать в Tabys CRM!</b>\n"
+            f"👤 <b>{result.admin_name}</b>\n"
+            f"{role_icon} <b>Роль:</b> <code>{result.role}</code>\n\n"
+            "🎉 <b>Добро пожаловать в Saryarqa Jastary!</b>\n"
             "Используйте меню ниже для начала работы:",
             reply_markup=get_main_menu(new_rbac),
             parse_mode="HTML"
@@ -258,10 +259,12 @@ async def callback_logout(
 
     logger.auth_event("logout", user.id, True)
 
-    await callback.answer("Выход выполнен")
+    await callback.answer("✅ Выход выполнен", show_alert=True)
     await callback.message.edit_text(
-        "Вы успешно вышли из системы.\n\n"
-        "Используйте /login <OTP_ТОКЕН> для входа."
+        "👋 <b>Выход выполнен успешно</b>\n\n"
+        "✅ Ваша сессия завершена.\n\n"
+        "🔐 Используйте <code>/login ВАШ_OTP</code> для входа.",
+        parse_mode="HTML"
     )
 
 
@@ -449,7 +452,7 @@ async def cmd_help(message: Message):
     Shows available commands
     """
     await message.answer(
-        "📚 <b>Tabys CRM Bot - Помощь</b>\n\n"
+        "📚 <b>Saryarqa Jastary Bot - Помощь</b>\n\n"
         "🤖 <b>Доступные команды:</b>\n"
         "├ /start - Запустить бота\n"
         "├ /login &lt;OTP&gt; - Войти с помощью OTP\n"
@@ -458,7 +461,7 @@ async def cmd_help(message: Message):
         "├ /menu - Показать главное меню\n"
         "└ /help - Это сообщение помощи\n\n"
         "🔐 <b>Шаги авторизации:</b>\n"
-        "1️⃣ Откройте админ-панель Tabys\n"
+        "1️⃣ Откройте админ-панель Saryarqa Jastary\n"
         "2️⃣ Нажмите 'Сгенерировать Telegram OTP'\n"
         "3️⃣ Скопируйте команду <code>/login</code>\n"
         "4️⃣ Отправьте её этому боту\n\n"

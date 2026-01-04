@@ -1,5 +1,5 @@
 """
-Tabys CRM Telegram Bot
+Saryarqa Jastary Telegram Bot
 Main entry point
 """
 import asyncio
@@ -24,6 +24,7 @@ from handlers import (
     news_router,
     projects_router,
     admin_router,
+    broadcasts_router,
 )
 
 logger = get_logger(__name__)
@@ -77,6 +78,7 @@ def create_dispatcher() -> Dispatcher:
     dp.include_router(news_router)
     dp.include_router(projects_router)
     dp.include_router(admin_router)
+    dp.include_router(broadcasts_router)
 
     # Register startup/shutdown handlers
     dp.startup.register(on_startup)
@@ -100,7 +102,7 @@ async def main():
     # Setup logging
     setup_logging()
 
-    logger.info("Initializing Tabys CRM Telegram Bot...")
+    logger.info("Initializing Saryarqa Jastary Telegram Bot...")
 
     # Create bot and dispatcher
     bot = create_bot()

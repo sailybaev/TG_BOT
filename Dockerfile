@@ -1,4 +1,3 @@
-# Tabys CRM Telegram Bot Dockerfile
 # Production-ready multi-stage build
 
 FROM python:3.11-slim AS builder
