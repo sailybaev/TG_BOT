@@ -25,6 +25,7 @@ from handlers import (
     projects_router,
     admin_router,
     broadcasts_router,
+    user_link_router,
 )
 
 logger = get_logger(__name__)
@@ -71,6 +72,8 @@ def create_dispatcher() -> Dispatcher:
     dp.callback_query.middleware(RBACMiddleware())
 
     # Register routers
+    # IMPORTANT: user_link_router MUST be first to handle deep links before auth
+    dp.include_router(user_link_router)
     dp.include_router(auth_router)
     dp.include_router(events_router)
     dp.include_router(courses_router)

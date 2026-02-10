@@ -7,6 +7,7 @@ from .news import router as news_router
 from .projects import router as projects_router
 from .admin import router as admin_router
 from .broadcasts import router as broadcasts_router
+from .user_link import router as user_link_router
 
 __all__ = [
     "auth_router",
@@ -17,4 +18,5 @@ __all__ = [
     "projects_router",
     "admin_router",
     "broadcasts_router",
+    "user_link_router",
 ]

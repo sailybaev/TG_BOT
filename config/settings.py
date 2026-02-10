@@ -53,6 +53,12 @@ class Settings(BaseSettings):
     # Debug mode
     debug: bool = Field(default=False, description="Enable debug mode")
 
+    # User Telegram Linking
+    telegram_bot_link_secret: str = Field(
+        default="",
+        description="Shared secret for user telegram linking (must match backend)"
+    )
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
